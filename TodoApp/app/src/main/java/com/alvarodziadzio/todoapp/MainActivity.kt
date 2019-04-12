@@ -1,15 +1,13 @@
 package com.alvarodziadzio.todoapp
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,16 +20,12 @@ class MainActivity : AppCompatActivity() {
 
         val list: MutableList<Item> = mutableListOf()
 
-        for (i in 0..5) {
-            val it = Item(
-                i,
-                i.toString(),
-                i.toString(),
-                false
-            )
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "todo-app"
+        ).build()
 
-            list.add(it)
-        }
+        /*val list = */db.itemDao().insertAll(Item(1, "Foda", "Foda", false))
 
         adapter = ItemAdapter(list)
         adapter.context = this
