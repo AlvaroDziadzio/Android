@@ -21,6 +21,7 @@ class ItemAdapter(val list: MutableList<Item>) : RecyclerView.Adapter<RecyclerVi
 
     var editPos = -1
     lateinit var context: Context
+    lateinit var db: AppDatabase
 
     private val VIEW_EDIT = 0
     private val VIEW_SHOW = 1
@@ -53,6 +54,10 @@ class ItemAdapter(val list: MutableList<Item>) : RecyclerView.Adapter<RecyclerVi
                 lItem.title= holder.title.text.toString()
                 lItem.description = holder.description.text.toString()
                 editPos = -1
+                if (db.itemDao().loadAllByIds(intArrayOf(lItem.id)).isEmpty())
+                    db.itemDao().insert(lItem)
+                else
+                    db.itemDao().update(lItem)
                 notifyItemChanged(position)
             }
 
@@ -79,6 +84,7 @@ class ItemAdapter(val list: MutableList<Item>) : RecyclerView.Adapter<RecyclerVi
                     list.removeAt(position)
                     notifyItemRemoved(position)
                     notifyItemRangeChanged(0, list.size)
+                    db.itemDao().delete(lItem)
                     editPos = -1
                 }
             }
@@ -88,6 +94,7 @@ class ItemAdapter(val list: MutableList<Item>) : RecyclerView.Adapter<RecyclerVi
             holder.card.setOnLongClickListener {
                 lItem.isComplete = !lItem.isComplete
                 notifyItemChanged(position)
+                db.itemDao().update(lItem)
                 true
             }
 
