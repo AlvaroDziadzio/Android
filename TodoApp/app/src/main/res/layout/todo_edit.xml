@@ -14,27 +14,31 @@
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:ems="10"
-                android:id="@+id/description"
+                android:id="@+id/descriptionEdit"
                 android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/title"/>
+                android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/titleEdit"
+                android:hint="@string/hint_description" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         <EditText
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="Name"
                 android:ems="10"
                 app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/title"
+                android:id="@+id/titleEdit"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp" app:layout_constraintBottom_toBottomOf="@+id/saveButton"
-                android:layout_marginEnd="8dp" app:layout_constraintEnd_toStartOf="@+id/saveButton"/>
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp" app:layout_constraintEnd_toStartOf="@+id/saveEdit"
+                android:hint="@string/hint_title"/>
         <ImageButton
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:id="@+id/saveButton" app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
-                app:layout_constraintTop_toTopOf="parent" android:background="@drawable/ic_save"
-                android:backgroundTint="@color/colorPrimary"/>
+                android:id="@+id/saveEdit" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/ic_save"
+                android:backgroundTint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="@+id/titleEdit"
+                app:layout_constraintTop_toTopOf="@+id/titleEdit"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

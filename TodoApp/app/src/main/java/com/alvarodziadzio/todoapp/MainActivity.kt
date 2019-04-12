@@ -41,7 +41,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun addNew(view: View) {
-        Log.d("APP", "COISA")
+        adapter.list.add(Item(
+            adapter.itemCount,
+            "",
+            "",
+            false
+        ))
+
+        adapter.notifyItemInserted(adapter.itemCount - 1)
+        adapter.editPos = adapter.itemCount - 1
+        rview.scrollToPosition(adapter.itemCount -1)
     }
 
 }
