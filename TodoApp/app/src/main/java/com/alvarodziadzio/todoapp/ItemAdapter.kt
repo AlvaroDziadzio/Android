@@ -1,19 +1,26 @@
 package com.alvarodziadzio.todoapp
 
+import android.content.Context
+import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 
 class ItemAdapter(val list: MutableList<Item>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var editPos = -1
+    lateinit var context: Context
 
     private val VIEW_EDIT = 0
     private val VIEW_SHOW = 1
@@ -35,30 +42,61 @@ class ItemAdapter(val list: MutableList<Item>) : RecyclerView.Adapter<RecyclerVi
     override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = list[position]
+        val lItem = list[position]
 
         if (holder is EditView) {
-            holder.title.setText(item.title)
-            holder.description.setText(item.description)
+
+            holder.title.setText(lItem.title)
+            holder.description.setText(lItem.description)
+
             holder.save.setOnClickListener {
-                item.title= holder.title.text.toString()
-                item.description = holder.description.text.toString()
+                lItem.title= holder.title.text.toString()
+                lItem.description = holder.description.text.toString()
+                editPos = -1
+                notifyItemChanged(position)
             }
+
         }
         else if (holder is ShowView) {
-            holder.title.setText(item.title)
-            holder.description.setText(item.description)
-            holder.delete.setOnClickListener {
-                Log.d("APP", "Card $position aaaaaaaaaa")
-                list.removeAt(position)
-                notifyItemRemoved(position)
-                notifyItemRangeChanged(0, list.size)
-                editPos = -1
+
+            holder.title.setText(lItem.title)
+
+            if (lItem.isComplete) {
+                holder.title.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                holder.delete.background = ContextCompat.getDrawable(context, R.drawable.ic_share)
+                holder.delete.setOnClickListener {
+                    val sendIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, "Oba! Acabei de concluir: ${lItem.title}")
+                        type = "text/plain"
+                    }
+                    startActivity(context, sendIntent, null)
+                }
+            } else {
+                holder.title.setTextColor(ContextCompat.getColor(context, R.color.primary_text_default_material_light))
+                holder.delete.background = ContextCompat.getDrawable(context, R.drawable.ic_delete_black_24dp)
+                holder.delete.setOnClickListener {
+                    list.removeAt(position)
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(0, list.size)
+                    editPos = -1
+                }
             }
+
+
+
+            holder.card.setOnLongClickListener {
+                lItem.isComplete = !lItem.isComplete
+                notifyItemChanged(position)
+                true
+            }
+
             holder.card.setOnClickListener {
                 editPos = position
                 notifyItemChanged(position)
+                lItem.isComplete = false
             }
+
         }
 
     }
@@ -99,14 +137,12 @@ class ItemAdapter(val list: MutableList<Item>) : RecyclerView.Adapter<RecyclerVi
 
     inner class ShowView(view: View) : RecyclerView.ViewHolder(view) {
 
-        val title: CheckBox
-        val description: TextView
+        val title: TextView
         val card: CardView
         val delete: ImageButton
 
         init {
             title = view.findViewById(R.id.titleShow)
-            description = view.findViewById(R.id.descriptionShow)
             card = view.findViewById(R.id.todoCard)
             delete = view.findViewById(R.id.deleteShow)
         }

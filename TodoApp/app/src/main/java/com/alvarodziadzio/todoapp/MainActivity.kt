@@ -1,10 +1,12 @@
 package com.alvarodziadzio.todoapp
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         adapter = ItemAdapter(list)
+        adapter.context = this
 
         rview = findViewById(R.id.recyclerView)
         rview.layoutManager = LinearLayoutManager(this)

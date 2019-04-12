@@ -4,5 +4,5 @@ data class Item(
     var id: Int,
     var title: String,
     var description: String,
-    var complete: Boolean
+    var isComplete: Boolean
 )
