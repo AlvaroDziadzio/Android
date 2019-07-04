@@ -13,22 +13,25 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var adapter: ItemAdapter
     lateinit var rview: RecyclerView
+    lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val list: MutableList<Item> = mutableListOf()
-
-        val db = Room.databaseBuilder(
+        db = Room.databaseBuilder(
             applicationContext,
-            AppDatabase::class.java, "todo-app"
-        ).build()
+            AppDatabase::class.java,
+            "todo.db"
+        ).allowMainThreadQueries().build()
 
-        /*val list = */db.itemDao().insertAll(Item(1, "Foda", "Foda", false))
+        val list: MutableList<Item> = db.itemDao().getAll().toMutableList()
+
+        //val list: MutableList<Item> = mutableListOf()
 
         adapter = ItemAdapter(list)
         adapter.context = this
+        adapter.db = db
 
         rview = findViewById(R.id.recyclerView)
         rview.layoutManager = LinearLayoutManager(this)
@@ -39,7 +42,6 @@ class MainActivity : AppCompatActivity() {
 
     fun addNew(view: View) {
         adapter.list.add(Item(
-            adapter.itemCount,
             "",
             "",
             false

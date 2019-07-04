@@ -4,13 +4,13 @@ import androidx.room.*
 
 @Entity
 data class Item(
-    @PrimaryKey
-    var id: Int = 0,
-
     var title: String,
     var description: String,
     var isComplete: Boolean
-)
+) {
+    @PrimaryKey (autoGenerate = true)
+    var id: Int = 0
+}
 
 @Dao
 interface ItemDao {
@@ -21,7 +21,7 @@ interface ItemDao {
     fun loadAllByIds(itemIds: IntArray): List<Item>
 
     @Insert
-    fun insertAll(vararg itens: Item)
+    fun insert(item: Item)
 
     @Update
     fun update(item: Item)
