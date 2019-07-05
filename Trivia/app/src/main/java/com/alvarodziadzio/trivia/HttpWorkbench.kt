@@ -2,6 +2,8 @@ package com.alvarodziadzio.trivia
 
 import android.os.AsyncTask
 import android.util.Log
+import com.alvarodziadzio.trivia.data.User
+import com.alvarodziadzio.trivia.questionProvider.QuestionFilter
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -84,7 +86,7 @@ object HttpWorkbench {
     val reqRanking  = HttpRequest("https://tads2019-todo-list.herokuapp.com/ranking")
     val reqQuestion = HttpRequest("https://opentdb.com/api.php")
 
-    fun getQuestions(params: QuestionProvider.QuestionProviderConfig, callback: (JSONObject?) -> Unit) {
+    fun getQuestions(params: QuestionFilter, callback: (JSONObject?) -> Unit) {
 
         val map = mutableMapOf("amount" to params.amount.toString())
 
@@ -99,6 +101,20 @@ object HttpWorkbench {
 
         reqQuestion.params = map
         HttpRequestTask(reqQuestion, callback).execute()
+    }
+
+    fun auth(email: String, password: String, callback: (JSONObject?) -> Unit) {
+        reqLogin.params = mapOf("email" to email, "senha" to password)
+        HttpRequestTask(reqLogin, callback).execute()
+    }
+
+    fun getRanking(callback: (JSONObject?) -> Unit) {
+        HttpRequestTask(reqRanking, callback).execute()
+    }
+
+    fun addPoints(user: User, points: Int, callback: (JSONObject?) -> Unit) {
+        reqPoints.params = mapOf("email" to user.email, "senha" to user.password, "pontos" to points.toString())
+        HttpRequestTask(reqPoints, callback).execute()
     }
 
 }
