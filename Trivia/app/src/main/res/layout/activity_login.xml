@@ -2,6 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent" android:layout_margin="12dp">
 
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/email"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberPassword"
+            android:ems="10"
+            android:id="@+id/password"/>
+    <Button
+            android:text="@string/button_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/login"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/error"/>
+    <Button
+            android:text="@string/button_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/registrer" android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"/>
 </LinearLayout>

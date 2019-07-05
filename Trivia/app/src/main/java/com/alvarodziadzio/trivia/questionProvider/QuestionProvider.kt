@@ -1,5 +1,6 @@
 package com.alvarodziadzio.trivia.questionProvider
 
+import android.text.Html
 import com.alvarodziadzio.trivia.HttpWorkbench
 import com.alvarodziadzio.trivia.data.Question
 import org.json.JSONObject
@@ -78,13 +79,13 @@ class QuestionProvider(ready: () -> Unit) {
         val cat = obj.getString("category")
         val type = obj.getString("type")
         val difficulty = obj.getString("difficulty")
-        val question = obj.getString("question")
-        val correct = obj.getString("correct_answer")
+        val question = Html.fromHtml(obj.getString("question")).toString()
+        val correct = Html.fromHtml(obj.getString("correct_answer")).toString()
         val incorrect: MutableList<String> = mutableListOf()
 
         val arr = obj.getJSONArray("incorrect_answers")
         for (i in 0 until arr.length()) {
-            incorrect.add(arr.getString(i))
+            incorrect.add(Html.fromHtml(arr.getString(i)).toString())
         }
 
         return Question(cat, type, difficulty, question, correct, incorrect.toList())

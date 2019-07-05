@@ -1,65 +1,69 @@
 package com.alvarodziadzio.trivia
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import com.alvarodziadzio.trivia.data.Question
+import android.view.MenuItem
+import androidx.fragment.app.Fragment
 import com.alvarodziadzio.trivia.data.User
-import kotlinx.android.synthetic.main.activity_main.*
+import com.alvarodziadzio.trivia.fragments.GameMultipleFragment
+import com.alvarodziadzio.trivia.fragments.RankingFragment
+import com.alvarodziadzio.trivia.fragments.SettingsFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_game.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+
+    lateinit var nav: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_game)
 
-        val user = User("alvaro.email@email.com", "123456", 0)
-        Game.start(user) {
-            populateButtons(Game.nextRemote())
+        val pref = getPreferences(Context.MODE_PRIVATE)
+
+        val email = pref.getString("email", "")
+        val password = pref.getString("password", "")
+
+        HttpWorkbench.auth(email, password) {
+            if (it != null) {
+                if(!it.getBoolean("sucesso")) {
+                    val i = Intent(this, LoginActivity::class.java)
+                    i.action = Intent.ACTION_VIEW
+                    startActivity(i)
+                }
+
+            }
         }
 
 
+
+//        Game.start(User("alvaro.email@email.com", "123456", 0)) {
+//            nav.selectedItemId = R.id.navigation_game
+//            openFragment(GameMultipleFragment(Game.nextRemote()!!))
+//        }
+
+        nav = navigation
+        nav.setOnNavigationItemSelectedListener(this)
+
     }
 
-    fun populateButtons(q: Question?) {
-
-        if (q != null) {
-
-            textView.text = q.question
-
-            button.text = q.correct_answer
-            button2.text = q.incorrect_answers[0]
-
-            if (q.type == "multiple") {
-                button3.text = q.incorrect_answers[1]
-                button4.text = q.incorrect_answers[2]
-            }
-
-            button.setOnClickListener {
-                Game.answer(q.correct_answer)
-                populateButtons(Game.nextRemote())
-                timeText.text = Game.user.points.toString()
-            }
-
-            button2.setOnClickListener {
-                Game.answer(q.incorrect_answers[0])
-                populateButtons(Game.nextRemote())
-            }
-
-            button3.setOnClickListener {
-                Game.answer(q.incorrect_answers[0])
-                populateButtons(Game.nextRemote())
-            }
-
-            button4.setOnClickListener {
-                Game.answer(q.incorrect_answers[0])
-                populateButtons(Game.nextRemote())
-            }
-
+    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
+        when (p0.itemId) {
+            R.id.navigation_game -> openFragment(GameMultipleFragment(Game.nextRemote()!!))
+            R.id.navigation_ranking -> openFragment(RankingFragment())
+            R.id.navigation_settings -> openFragment(SettingsFragment())
         }
 
+        return true
     }
 
+    private fun openFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.container, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
 
 }
