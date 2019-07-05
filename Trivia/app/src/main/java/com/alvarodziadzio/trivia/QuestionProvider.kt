@@ -1,70 +1,79 @@
 package com.alvarodziadzio.trivia
 
+import android.util.Log
 import com.alvarodziadzio.trivia.data.Question
+import org.json.JSONObject
 import kotlin.random.Random
 
-object QuestionFaker {
-
-    val difficulties = listOf("easy", "medium", "hard")
-    val types = listOf("multiple", "boolean")
-    val categories = listOf("General Knowledge", "Entertainment: Books", "Entertainment: Film", "Science & Nature", "Science: Computers")
-    val words = listOf("thing", "banana", "cherry", "car", "lambda", "supreme", "alien", "primary", "nevertheless", "dog", "john", "china", "japan", "london", "true", "false", "either", "do", "the", "was", "is", "then")
-
-    operator fun invoke(): Question {
-
-        // Fake Type
-        val type = types.random()
-        val correctAnswer: String
-        val wrongAnwsers: List<String>
-        val category = categories.random()
-        val difficulty = difficulties.random()
-        val question = StringBuffer()
-
-        // Fake Type
-        if (type == "multiple") {
-            wrongAnwsers = listOf(words.random(), words.random(), words.random())
-            correctAnswer = words.random()
-        }
-        else {
-
-            if (Random.nextBoolean()) {
-                correctAnswer = "true"
-                wrongAnwsers = listOf("false")
-            }
-            else {
-                correctAnswer = "false"
-                wrongAnwsers = listOf("true")
-            }
-
-        }
-
-
-        // Fake Question
-        for (i in 0..Random.nextInt(8, 16)) {
-            question.append(words.random())
-        }
-
-
-        return Question(category, type, difficulty, question.toString(), correctAnswer, wrongAnwsers)
-
-    }
-
-}
-
-
-object QuestionProvider {
+class QuestionProvider {
 
     val queue: MutableList<Question> = mutableListOf()
+    val aLater: MutableList<Question> = mutableListOf()
+    val config: QuestionProviderConfig = QuestionProviderConfig(10)
 
     init {
+        loadNew()
+    }
 
-        for (i in 0..10) {
-            queue.add(QuestionFaker())
+    // Dequeue general
+    fun nextRemote(): Question {
+        if (queue.size < 5)
+            loadNew()
+        return queue.removeAt(0)
+    }
+
+    // Dequeue Answer later
+    fun nextLocal(): Question? {
+        if (aLater.size > 0)
+            return aLater.removeAt(0)
+        return null
+    }
+
+    // Enqueue
+    fun answerLater(q: Question) = aLater.add(q)
+
+    fun reset() {
+        queue.clear()
+        loadNew()
+    }
+
+    private fun loadNew() {
+        Log.d("Network", "Fetching new questions!!!")
+        HttpWorkbench.getQuestions(config) {
+            if (it != null) {
+
+                val arr = it.getJSONArray("results")
+
+                for (i in 0 until arr.length()) {
+                    queue.add(jsonToQuestion(arr[i] as JSONObject))
+                }
+
+            }
         }
+    }
+
+    private fun jsonToQuestion(obj: JSONObject): Question {
+
+        val cat = obj.getString("category")
+        val type = obj.getString("type")
+        val difficulty = obj.getString("difficulty")
+        val question = obj.getString("question")
+        val correct = obj.getString("correct_answer")
+        val incorrect: MutableList<String> = mutableListOf()
+
+        val arr = obj.getJSONArray("incorrect_answers")
+        for (i in 0 until arr.length()) {
+            incorrect.add(arr.getString(i))
+        }
+
+        return Question(cat, type, difficulty, question, correct, incorrect.toList())
 
     }
 
-    fun next() = queue.removeAt(0)
-    fun size() = queue.size
+    data class QuestionProviderConfig(var amount: Int) {
+        var category: String? = null
+        var difficulty: String? = null
+        var type: String? = null
+    }
 
 }

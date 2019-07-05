@@ -57,7 +57,7 @@ class HttpRequestTask(private val request: HttpRequest, val onResult: (JSONObjec
     }
 
 
-    // Return the url formatted string
+    // Return the formatted url string
     private fun buildParamString(params: Map<String, String>): String {
 
         val sb = StringBuffer()
@@ -74,3 +74,53 @@ class HttpRequestTask(private val request: HttpRequest, val onResult: (JSONObjec
     }
 
 }
+
+object HttpWorkbench {
+
+    // List of possible requests
+    val reqLogin    = HttpRequest("https://tads2019-todo-list.herokuapp.com/usuario/login").apply { method = "POST" }
+    val reqRegister = HttpRequest("https://tads2019-todo-list.herokuapp.com/usuario/registrar").apply { method = "POST" }
+    val reqPoints   = HttpRequest("https://tads2019-todo-list.herokuapp.com/usuario/pontuacao").apply { method = "PUT" }
+    val reqRanking  = HttpRequest("https://tads2019-todo-list.herokuapp.com/ranking")
+    val reqQuestion = HttpRequest("https://opentdb.com/api.php")
+
+    fun getQuestions(params: QuestionProvider.QuestionProviderConfig, callback: (JSONObject?) -> Unit) {
+
+        val map = mutableMapOf("amount" to params.amount.toString())
+
+        if (params.category != null)
+            map["category"] = params.category!!
+
+        if (params.difficulty != null)
+            map["difficulty"] = params.difficulty!!
+
+        if (params.type != null)
+            map["type"] = params.type!!
+
+        reqQuestion.params = map
+        HttpRequestTask(reqQuestion, callback).execute()
+    }
+
+}
+
+
+
+/*
+
+API de Login -> POST https://tads2019-todo-list.herokuapp.com/usuario/login
+email
+senha
+
+API de Registro -> POST https://tads2019-todo-list.herokuapp.com/usuario/registrar
+email
+senha
+nome
+
+API para registrar pontuação de jogador -> PUT https://tads2019-todo-list.herokuapp.com/usuario/pontuacao
+email
+senha
+pontos (-10 a 10)
+
+API para consultar o Ranking -> GET https://tads2019-todo-list.herokuapp.com/ranking
+
+ */
