@@ -7,4 +7,15 @@
     <string name="button_answer_later">Answer Later</string>
     <string name="button_login">Login</string>
     <string name="button_register">Register</string>
+    <string name="text_email">E-Mail</string>
+    <string name="difficulty_any">Any</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_medium">Medium</string>
+    <string name="difficulty_hard">Hard</string>
+    <string name="text_difficulty">Difficulty</string>
+    <string name="text_category">Category</string>
+    <string name="button_updtate_config">Update Config</string>
+    <string name="text_type">Type</string>
+    <string name="type_multiple">Multiple</string>
+    <string name="type_bool">Boolean</string>
 </resources>

@@ -1,29 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-            android:text="TextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/textView"/>
-    <Button
-            android:text="Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/button5"/>
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Name"
-            android:ems="10"
-            android:id="@+id/editText"/>
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Name"
-            android:ems="10"
-            android:id="@+id/editText2"/>
-</LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="vertical" android:padding="16dp">
+        <TextView
+                android:text="@string/text_difficulty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView" android:textSize="18sp"
+                android:paddingBottom="4dp"/>
+        <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:checkedButton="@+id/any"
+                android:id="@+id/radio_difficulty">
+            <RadioButton
+                    android:text="@string/difficulty_any"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/any" android:layout_weight="1"/>
+            <RadioButton
+                    android:text="@string/difficulty_easy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/easy" android:layout_weight="1"/>
+            <RadioButton
+                    android:text="@string/difficulty_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/medium" android:layout_weight="1"/>
+            <RadioButton
+                    android:text="@string/difficulty_hard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/hard" android:layout_weight="1"/>
+        </RadioGroup>
+        <TextView
+                android:text="@string/text_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView2" android:textSize="18sp"
+                android:layout_marginTop="16dp"/>
+        <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/category" android:spinnerMode="dropdown"
+                android:dropDownWidth="match_parent" android:layout_marginTop="4dp"/>
+        <TextView
+                android:text="@string/text_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView3" android:textSize="18sp"
+                android:layout_marginTop="16dp"/>
+        <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:checkedButton="@+id/any2"
+                android:layout_marginTop="4dp" android:id="@+id/radio_type">
+            <RadioButton
+                    android:text="@string/difficulty_any"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/any2" android:layout_weight="1"/>
+            <RadioButton
+                    android:text="@string/type_bool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/bool" android:layout_weight="1"/>
+            <RadioButton
+                    android:text="@string/type_multiple"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/multiple" android:layout_weight="1"/>
+        </RadioGroup>
+        <Button
+                android:text="@string/button_updtate_config"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/update" android:layout_marginTop="32dp"/>
+    </LinearLayout>
+
+</ScrollView>

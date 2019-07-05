@@ -112,6 +112,11 @@ object HttpWorkbench {
         HttpRequestTask(reqRanking, callback).execute()
     }
 
+    fun register(email: String, password: String, name: String, callback: (JSONObject?) -> Unit) {
+        reqRegister.params = mapOf("email" to email, "senha" to password, "nome" to name)
+        HttpRequestTask(reqRegister, callback).execute()
+    }
+
     fun addPoints(user: User, points: Int, callback: (JSONObject?) -> Unit) {
         reqPoints.params = mapOf("email" to user.email, "senha" to user.password, "pontos" to points.toString())
         HttpRequestTask(reqPoints, callback).execute()

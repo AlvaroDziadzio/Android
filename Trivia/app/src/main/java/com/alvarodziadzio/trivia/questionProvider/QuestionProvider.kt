@@ -1,6 +1,7 @@
 package com.alvarodziadzio.trivia.questionProvider
 
 import android.text.Html
+import android.util.Log
 import com.alvarodziadzio.trivia.HttpWorkbench
 import com.alvarodziadzio.trivia.data.Question
 import org.json.JSONObject
@@ -47,6 +48,8 @@ class QuestionProvider(ready: () -> Unit) {
             if (it != null) {
 
                 val arr = it.getJSONArray("results")
+
+                Log.d("Reset", "questions reseted")
 
                 queue.clear()
                 for (i in 0 until arr.length()) {

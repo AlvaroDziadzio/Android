@@ -15,7 +15,7 @@ object Game {
     var time: Long = 50000
     var lastTime: Long = 0
 
-    private lateinit var provider: QuestionProvider
+    lateinit var provider: QuestionProvider
 
     private val later: MutableList<Question> = mutableListOf()
 
